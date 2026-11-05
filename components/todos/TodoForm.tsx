@@ -138,7 +138,7 @@ export default function TodoForm({
         </select>
       </div>
 
-      {error && <p className="text-sm text-red-600 dark:text-red-400" role="alert">{error}</p>}
+      {error && <p className="text-sm text-danger" role="alert">{error}</p>}
 
       <div className="flex items-center justify-between pt-2">
         {onDelete ? (

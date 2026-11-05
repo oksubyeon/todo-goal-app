@@ -66,7 +66,7 @@ export default function WeeklyPage() {
                 ) : (
                   <div
                     key={key}
-                    className="flex flex-col items-start justify-between gap-4 rounded-xl border border-dashed border-line p-5"
+                    className="flex flex-col items-start justify-between gap-4 rounded-card border border-dashed border-line p-6"
                   >
                     <div className="space-y-0.5">
                       <div className="text-xs font-medium text-faint">{LABELS[i]}</div>

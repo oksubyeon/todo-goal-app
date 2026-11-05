@@ -44,7 +44,7 @@ export default function GoalsPage() {
         <p className="text-sm text-muted">불러오는 중…</p>
       ) : goals.length === 0 ? (
         <div className="card flex flex-col items-center gap-3 py-14 text-center">
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-300">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-strong text-fg">
             <Icon name="target" className="h-5 w-5" />
           </span>
           <p className="text-sm text-muted">아직 1년 목표가 없습니다.</p>

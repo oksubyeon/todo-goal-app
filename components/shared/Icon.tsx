@@ -13,6 +13,7 @@ const PATHS = {
   chevronLeft: ['M15 18l-6-6 6-6'],
   clock: ['M12 3a9 9 0 1 0 0 18 9 9 0 1 0 0-18z', 'M12 7v5l3 2'],
   check: ['M20 6 9 17l-5-5'],
+  menu: ['M4 6h16M4 12h16M4 18h16'],
   circle: ['M12 4a8 8 0 1 0 0 16 8 8 0 1 0 0-16z'],
 } as const;
 

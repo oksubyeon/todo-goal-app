@@ -42,19 +42,41 @@ scripts/        dev-db.mjs, smoke.mjs
 
 ## 디자인 시스템
 
-- **색:** 메인 컬러는 `brand-*`(Tailwind indigo, `brand-600` = #4F46E5)입니다. 회색과 흰색은 의미 토큰으로 씁니다.
-  - `bg-canvas`: 페이지 배경
-  - `bg-surface`: 카드, 모달, 입력
-  - `bg-subtle`: 은은한 배경, hover
-  - `border-line`: 테두리
-  - `text-fg`, `text-muted`, `text-faint`: 본문, 보조, 흐린 글자
+흰 바탕, 잉크색 글자, 강조색 한 가지로 이루어진 마켓플레이스풍 디자인 언어를 따릅니다. 앱 이름과 로고는 이 앱의 것입니다.
 
-  토큰 값은 `app/globals.css`의 CSS 변수에 있고, `.dark`에서 값만 바뀝니다. 그래서 새 화면에는 `slate-*`나 `bg-white`를 직접 쓰지 말고 토큰을 쓰세요. 강조색 배경에는 `dark:` 변형을 같이 줍니다(예: `badge-brand`).
-- **공통 클래스(`app/globals.css`):** `.card`, `.card-title`, `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.btn-danger`, `.btn-sm`, `.icon-btn`, `.input`, `.label`, `.badge-*`. 모서리는 카드 `rounded-xl`, 버튼과 입력 `rounded-lg`입니다. 그림자는 `shadow-soft`가 기본이고, hover와 모달에 `shadow-lift`를 씁니다.
-- **다크 모드:** `<html class="dark">`로 켭니다. 헤더의 `ThemeToggle`이 시스템 → 라이트 → 다크 순으로 바꾸고, 선택은 `localStorage.theme`에 저장합니다. `app/layout.tsx`의 인라인 스크립트가 페인트 전에 적용해서 깜빡이지 않습니다.
-- **폰트:** Pretendard Variable(npm `pretendard`, 자체 호스팅)입니다.
-- **아이콘:** `components/shared/Icon.tsx`(선 아이콘)를 씁니다. 이모지는 쓰지 않습니다.
-- **레이아웃:** 화면 제목은 `PageHeader`(제목, 설명, 동작 버튼)로 만듭니다. 본문은 `AppShell`이 `max-w-6xl`과 같은 좌우 여백으로 정렬합니다.
+- **강조색은 하나만, 아껴서 씁니다.** `brand-500` 코랄 #ff385c입니다. 눌림은 `brand-600` #e00b41, 비활성은 `brand-200` #ffd1da입니다. 다음 곳에만 씁니다.
+  - 주요 버튼(`.btn-primary`)
+  - 진행률 바
+  - High 우선순위 배지
+  - 로고
+  - 인라인 링크(`text-brand-600`)
+
+  나머지는 무채색입니다. 활성 탭, 오늘 날짜, 선택된 체크박스처럼 선택된 상태는 잉크(`fg`)로 표시합니다.
+- **색 토큰:** 값은 `app/globals.css`의 CSS 변수에 있고, `.dark`에서는 값만 바뀝니다.
+
+  | 토큰 | 라이트 값 | 용도 |
+  |---|---|---|
+  | `canvas` | #fff | 페이지 바닥 |
+  | `surface` | #fff | 카드, 모달, 입력 |
+  | `subtle` | #f7f7f7 | 옅은 채움, hover |
+  | `strong` | #f2f2f2 | 원형 아이콘 버튼 |
+  | `line` | #ddd | 1px 테두리 |
+  | `line-soft` | #ebebeb | 옅은 구분선 |
+  | `fg` | #222 | 잉크 |
+  | `muted` | #6a6a6a | 보조 글자 |
+  | `faint` | #929292 | 흐린 글자 |
+  | `danger` | #c13515 | 오류 글자 |
+
+  `slate-*`, `bg-white`, `text-red-*`처럼 색을 직접 쓰지 말고 토큰을 쓰세요.
+- **모양:** 버튼과 입력은 `rounded-lg`(8px), 카드와 모달은 `rounded-card`(14px), 알약 모양과 아이콘 버튼은 `rounded-full`입니다. 주요 버튼과 입력은 높이 48px(`.btn`, `.input`)이고, 작은 버튼은 `.btn-sm`(36px)입니다.
+- **그림자는 한 단계뿐입니다(`shadow-float`).** 카드는 평소에 그림자 없이 1px 테두리만 두고, hover(`.card-float`), 드롭다운, 모달, 로그인 카드에만 그림자를 씁니다.
+- **입력:** 포커스하면 2px 잉크 테두리가 됩니다. 글로우나 링은 없습니다.
+- **공통 클래스(`app/globals.css`):** `.card`, `.card-float`, `.card-title`, `.btn-primary`, `.btn-secondary`(잉크 테두리), `.btn-ghost`(hover 시 밑줄), `.btn-danger`, `.btn-sm`, `.btn-pill`, `.icon-btn`, `.input`, `.label`, `.badge-neutral`, `.badge-quiet`, `.badge-brand`, `.badge-outline`.
+- **타이포그래피:** 화면 제목은 28px/700(`PageHeader`), 카드 제목은 16px/600, 본문은 16px, 메타 정보는 14px입니다. 배지는 한글 가독성을 위해 12px로 둡니다(원본 문서는 11px).
+- **내비게이션:** `TopNav`는 높이 80px입니다. 로고는 왼쪽, 탭은 가운데에 두고 활성 탭에 2px 잉크 밑줄을 그립니다. 오른쪽에는 테마 토글과 알약 모양 계정 메뉴(드롭다운에 사용자 이름과 로그아웃)가 있습니다. 768px 미만에서는 햄버거 메뉴로 바뀝니다.
+- **다크 모드:** 같은 원칙을 어두운 무채색과 코랄로 옮긴 버전입니다. 헤더의 `ThemeToggle`이 시스템 → 라이트 → 다크 순으로 바꾸고, 선택은 `localStorage.theme`에 저장합니다. `app/layout.tsx`의 인라인 스크립트가 페인트 전에 적용합니다.
+- **폰트:** Pretendard Variable(npm `pretendard`, 자체 호스팅)입니다. Inter 기반이라 원본 문서가 권하는 Inter 대체와 비율이 같고, 한글도 지원합니다.
+- **아이콘과 레이아웃:** 아이콘은 `components/shared/Icon.tsx`(선 아이콘)를 쓰고 이모지는 쓰지 않습니다. 본문은 최대 1280px(`max-w-content`)이고, 좌우 여백은 24px, 768px 이상에서는 40px입니다.
 
 ## 핵심 규칙
 

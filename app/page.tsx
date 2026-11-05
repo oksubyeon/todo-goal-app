@@ -16,10 +16,10 @@ import { STATUSES, STATUS_LABEL, type Todo } from '@/types';
 
 const STATUS_COLOR = {
   todo: 'text-fg',
-  doing: 'text-amber-600 dark:text-amber-400',
-  done: 'text-emerald-600 dark:text-emerald-400',
+  doing: 'text-fg',
+  done: 'text-fg',
 } as const;
-const STATUS_DOT = { todo: 'bg-slate-400', doing: 'bg-amber-400', done: 'bg-emerald-500' } as const;
+const STATUS_DOT = { todo: 'bg-faint', doing: 'bg-amber-400', done: 'bg-emerald-500' } as const;
 
 export default function DashboardPage() {
   useLoad('plans', 'goals', 'todos');
@@ -54,14 +54,14 @@ export default function DashboardPage() {
       <PageHeader title="대시보드" description="이번 주 목표와 오늘 할 일을 한눈에 확인하세요." />
 
       {onboarding && (
-        <section className="rounded-xl border border-brand-200 bg-brand-50/60 p-5 dark:border-brand-500/30 dark:bg-brand-500/10">
-          <h2 className="mb-3 text-sm font-semibold text-brand-800 dark:text-brand-200">시작하기: 목표 → 주간 계획 → 할 일</h2>
+        <section className="rounded-card bg-subtle p-6">
+          <h2 className="mb-4 text-base font-semibold text-fg">시작하기: 목표 → 주간 계획 → 할 일</h2>
           <ol className="space-y-2 text-sm">
             {steps.map((s, i) => (
               <li key={s.label} className="flex items-center gap-2.5">
                 <span
                   className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
-                    s.done ? 'bg-emerald-500 text-white' : 'bg-surface text-muted ring-1 ring-line'
+                    s.done ? 'bg-fg text-canvas' : 'bg-surface text-muted ring-1 ring-line'
                   }`}
                 >
                   {s.done ? <Icon name="check" className="h-3 w-3" /> : i + 1}
@@ -69,9 +69,9 @@ export default function DashboardPage() {
                 {s.done ? (
                   <span className="text-muted line-through">{s.label}</span>
                 ) : s.href ? (
-                  <Link href={s.href} className="font-medium text-brand-700 hover:underline dark:text-brand-300">{s.label}</Link>
+                  <Link href={s.href} className="font-medium text-fg underline underline-offset-4 hover:text-brand-600">{s.label}</Link>
                 ) : s.action ? (
-                  <button onClick={s.action} className="font-medium text-brand-700 hover:underline dark:text-brand-300">{s.label}</button>
+                  <button onClick={s.action} className="font-medium text-fg underline underline-offset-4 hover:text-brand-600">{s.label}</button>
                 ) : (
                   <span className="text-fg">{s.label}</span>
                 )}
@@ -83,7 +83,7 @@ export default function DashboardPage() {
 
       {!plan ? (
         <section className="card flex flex-col items-center gap-3 py-14 text-center">
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-300">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-strong text-fg">
             <Icon name="calendar" className="h-5 w-5" />
           </span>
           <p className="text-sm text-muted">이번 주 계획이 아직 없습니다.</p>

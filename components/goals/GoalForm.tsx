@@ -53,7 +53,7 @@ export default function GoalForm({
           placeholder="왜 이 목표를 세웠는지, 어떻게 달성할지 적어 보세요."
         />
       </div>
-      {error && <p className="text-sm text-red-600 dark:text-red-400" role="alert">{error}</p>}
+      {error && <p className="text-sm text-danger" role="alert">{error}</p>}
       <div className="flex justify-end gap-2">
         <button type="button" className="btn-secondary" onClick={onCancel}>취소</button>
         <button type="submit" className="btn-primary" disabled={saving}>{saving ? '저장 중…' : submitLabel}</button>

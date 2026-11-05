@@ -106,7 +106,7 @@ export default function WeeklyPlanForm({
         <label className="label" htmlFor="week-memo">메모</label>
         <textarea id="week-memo" className="input" rows={3} value={memo} onChange={(e) => setMemo(e.target.value)} />
       </div>
-      {error && <p className="text-sm text-red-600 dark:text-red-400" role="alert">{error}</p>}
+      {error && <p className="text-sm text-danger" role="alert">{error}</p>}
       <div className="flex justify-end gap-2">
         <button type="button" className="btn-secondary" onClick={onCancel}>취소</button>
         <button type="submit" className="btn-primary" disabled={saving}>{saving ? '저장 중…' : plan ? '저장' : '만들기'}</button>

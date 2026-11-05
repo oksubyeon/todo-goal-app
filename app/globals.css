@@ -2,101 +2,119 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 색 토큰 (RGB 값). tailwind.config.ts의 canvas/surface/... 가 이 값을 씁니다. */
+/* 색 토큰 (RGB). tailwind.config.ts의 canvas/surface/... 가 이 값을 씁니다. */
 @layer base {
   :root {
-    --canvas: 248 250 252; /* slate-50 */
-    --surface: 255 255 255;
-    --subtle: 241 245 249; /* slate-100 */
-    --line: 226 232 240; /* slate-200 */
-    --fg: 15 23 42; /* slate-900 */
-    --muted: 100 116 139; /* slate-500 */
-    --faint: 148 163 184; /* slate-400 */
+    --canvas: 255 255 255; /* #ffffff */
+    --surface: 255 255 255; /* #ffffff */
+    --subtle: 247 247 247; /* #f7f7f7 surface-soft */
+    --strong: 242 242 242; /* #f2f2f2 surface-strong */
+    --line: 221 221 221; /* #dddddd hairline */
+    --line-soft: 235 235 235; /* #ebebeb */
+    --fg: 34 34 34; /* #222222 ink */
+    --muted: 106 106 106; /* #6a6a6a */
+    --faint: 146 146 146; /* #929292 */
+    --danger: 193 53 21; /* #c13515 */
     color-scheme: light;
   }
+  /* 다크 모드: 같은 원칙(무채색 + 코랄 한 가지)을 어둡게 */
   .dark {
-    --canvas: 2 6 23; /* slate-950 */
-    --surface: 15 23 42; /* slate-900 */
-    --subtle: 30 41 59; /* slate-800 */
-    --line: 51 65 85; /* slate-700 */
-    --fg: 241 245 249; /* slate-100 */
-    --muted: 148 163 184; /* slate-400 */
-    --faint: 100 116 139; /* slate-500 */
+    --canvas: 18 18 18;
+    --surface: 26 26 26;
+    --subtle: 34 34 34;
+    --strong: 44 44 44;
+    --line: 56 56 56;
+    --line-soft: 42 42 42;
+    --fg: 242 242 242;
+    --muted: 166 166 166;
+    --faint: 115 115 115;
+    --danger: 255 128 102;
     color-scheme: dark;
   }
   body {
-    @apply bg-canvas font-sans text-fg antialiased;
-    font-feature-settings: 'ss06' on;
+    @apply bg-canvas font-sans text-base text-fg antialiased;
   }
   ::selection {
-    @apply bg-brand-600/20;
+    @apply bg-brand-500/20;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--fg));
+    outline-offset: 2px;
   }
 }
 
 @layer components {
-  /* 버튼: 둥근 모서리 + 은은한 그림자 */
+  /* 버튼: 8px 모서리, 그림자 없음 */
   .btn {
-    @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40
-      disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-6 text-base font-medium transition
+      disabled:cursor-not-allowed;
   }
   .btn-primary {
-    @apply btn bg-brand-600 text-white shadow-soft hover:bg-brand-700;
+    @apply btn bg-brand-500 text-white active:bg-brand-600 disabled:bg-brand-200 dark:disabled:bg-brand-900 dark:disabled:text-white/60;
   }
   .btn-secondary {
-    @apply btn border border-line bg-surface text-fg shadow-soft hover:bg-subtle;
+    @apply btn border border-fg bg-surface text-fg hover:bg-subtle disabled:border-line disabled:text-faint;
   }
+  /* 텍스트 버튼: 표면·테두리 없이, hover 시 밑줄 */
   .btn-ghost {
-    @apply btn text-muted hover:bg-subtle hover:text-fg;
+    @apply btn px-2 text-fg underline-offset-4 hover:underline disabled:text-faint;
   }
   .btn-danger {
-    @apply btn text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10;
+    @apply btn px-2 text-danger underline-offset-4 hover:underline;
   }
   .btn-sm {
-    @apply px-2.5 py-1 text-xs;
+    @apply h-9 px-4 text-sm;
   }
+  .btn-pill {
+    @apply rounded-full;
+  }
+  /* 원형 아이콘 버튼 */
   .icon-btn {
-    @apply inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted transition hover:bg-subtle hover:text-fg
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40;
+    @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-fg transition hover:bg-strong;
   }
 
-  /* 입력 */
+  /* 입력: 1px 테두리, 포커스 시 2px 잉크 테두리 (글로우·링 없음) */
   .input {
-    @apply w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-fg shadow-soft outline-none transition
-      placeholder:text-faint focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20;
+    @apply w-full rounded-lg border border-line bg-surface px-3.5 py-3 text-base text-fg outline-none transition
+      placeholder:text-faint focus:border-fg focus:shadow-[inset_0_0_0_1px_rgb(var(--fg))];
+  }
+  /* 한 줄 입력과 선택 상자는 같은 높이(48px) */
+  input.input,
+  select.input {
+    @apply h-12 py-0;
+  }
+  select.input {
+    @apply pr-9;
   }
   .label {
-    @apply mb-1.5 block text-xs font-medium text-muted;
+    @apply mb-2 block text-sm font-medium text-fg;
   }
 
-  /* 카드 */
+  /* 카드: 14px 모서리, 평소에는 그림자 없이 테두리만 */
   .card {
-    @apply rounded-xl border border-line bg-surface p-5 shadow-soft;
+    @apply rounded-card border border-line bg-surface p-6;
+  }
+  .card-float {
+    @apply transition hover:shadow-float;
   }
   .card-title {
-    @apply text-sm font-semibold text-fg;
+    @apply text-base font-semibold text-fg;
   }
 
-  /* 작은 배지 */
+  /* 작은 배지 (한글 가독성을 위해 12px) */
   .badge {
-    @apply inline-flex max-w-full items-center gap-1 truncate rounded-md px-1.5 py-0.5 text-xs font-medium;
+    @apply inline-flex max-w-full items-center gap-1 truncate rounded-full px-2 py-0.5 text-xs font-semibold;
   }
   .badge-neutral {
+    @apply badge bg-subtle text-fg;
+  }
+  .badge-quiet {
     @apply badge bg-subtle text-muted;
   }
   .badge-brand {
     @apply badge bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300;
   }
-  .badge-red {
-    @apply badge bg-red-50 text-red-700 dark:bg-red-500/15 dark:text-red-300;
-  }
-  .badge-amber {
-    @apply badge bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300;
-  }
-  .badge-green {
-    @apply badge bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300;
-  }
-  .badge-sky {
-    @apply badge bg-sky-50 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300;
+  .badge-outline {
+    @apply badge border border-line bg-surface text-fg;
   }
 }

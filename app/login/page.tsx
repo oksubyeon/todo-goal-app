@@ -18,16 +18,16 @@ export default function LoginPage({ searchParams }: { searchParams: { error?: st
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-canvas p-4">
-      <div className="card w-full max-w-sm space-y-7 p-8 text-center shadow-lift">
+      <div className="card w-full max-w-sm space-y-7 p-8 text-center shadow-float">
         <div className="flex flex-col items-center text-center">
-          <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-white shadow-soft">
+          <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-card bg-brand-500 text-white">
             <Icon name="check" className="h-6 w-6" />
           </span>
-          <h1 className="text-2xl font-semibold tracking-tight text-fg">할일 + 계획</h1>
-          <p className="mt-2 text-sm text-muted">할 일, 주간 계획, 1년 목표를 하나로 연결하세요.</p>
+          <h1 className="text-2xl font-bold text-fg">할일 + 계획</h1>
+          <p className="mt-2 text-base text-muted">할 일, 주간 계획, 1년 목표를 하나로 연결하세요.</p>
         </div>
         {error && (
-          <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-300">
+          <p role="alert" className="rounded-lg bg-subtle px-3 py-2.5 text-sm text-danger">
             {error}
           </p>
         )}
@@ -35,7 +35,7 @@ export default function LoginPage({ searchParams }: { searchParams: { error?: st
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a
           href={href}
-          className="btn w-full justify-center gap-2 bg-slate-900 py-2.5 text-center text-white shadow-soft hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+          className="btn w-full justify-center bg-fg text-center text-canvas hover:opacity-90"
         >
           {/* 로고 크기 = 제목(할일 + 계획, text-2xl) 글자 크기 */}
           <svg aria-hidden viewBox="0 0 16 16" className="h-6 w-6 shrink-0 fill-current">

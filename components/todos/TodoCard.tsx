@@ -16,19 +16,19 @@ export function TodoCardView({ todo, dragging = false }: { todo: Todo; dragging?
 
   return (
     <div
-      className={`rounded-lg border bg-surface p-3.5 text-sm transition ${
-        dragging ? 'rotate-1 border-brand-300 shadow-lift dark:border-brand-500/50' : 'border-line shadow-soft hover:shadow-lift'
+      className={`rounded-card border bg-surface p-4 text-sm transition ${
+        dragging ? 'rotate-1 border-fg/30 shadow-float' : 'border-line hover:shadow-float'
       }`}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className={`font-medium leading-snug ${todo.status === 'done' ? 'text-faint line-through' : 'text-fg'}`}>{todo.title}</p>
+        <p className={`text-[15px] font-semibold leading-snug ${todo.status === 'done' ? 'text-faint line-through' : 'text-fg'}`}>{todo.title}</p>
         <PriorityBadge priority={todo.priority} />
       </div>
       {(todo.dueDate || todo.dayOfWeek != null || plan || goal) && (
         <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
           {todo.dueDate && (
             <span
-              className={`inline-flex items-center gap-1 text-xs ${overdue ? 'font-semibold text-red-600 dark:text-red-400' : 'text-muted'}`}
+              className={`inline-flex items-center gap-1 text-xs ${overdue ? 'font-semibold text-danger' : 'text-muted'}`}
               data-overdue={overdue || undefined}
             >
               <Icon name="clock" className="h-3 w-3" />
@@ -38,12 +38,12 @@ export function TodoCardView({ todo, dragging = false }: { todo: Todo; dragging?
           )}
           {todo.dayOfWeek != null && <Badge>{dayLabel(todo.dayOfWeek)}요일</Badge>}
           {plan && (
-            <Badge tone="sky" icon="calendar">
+            <Badge tone="quiet" icon="calendar">
               {dateKeyFromStored(plan.weekStart)} 주
             </Badge>
           )}
           {goal && (
-            <Badge tone="brand" icon="target">
+            <Badge tone="outline" icon="target">
               {goal.title}
             </Badge>
           )}
@@ -63,7 +63,7 @@ export default function TodoCard({ todo, onOpen }: { todo: Todo; onOpen: (todo: 
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`cursor-grab touch-none rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 active:cursor-grabbing ${isDragging ? 'opacity-40' : ''}`}
+      className={`cursor-grab touch-none rounded-card active:cursor-grabbing ${isDragging ? 'opacity-40' : ''}`}
       onClick={() => onOpen(todo)}
       data-testid="todo-card"
       {...attributes}

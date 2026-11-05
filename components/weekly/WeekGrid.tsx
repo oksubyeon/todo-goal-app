@@ -8,13 +8,13 @@ import Icon from '@/components/shared/Icon';
 import PriorityBadge from '@/components/shared/PriorityBadge';
 import type { Todo, WeeklyPlan } from '@/types';
 
-const STATUS_DOT = { todo: 'bg-slate-400', doing: 'bg-amber-400', done: 'bg-emerald-500' } as const;
+const STATUS_DOT = { todo: 'bg-faint', doing: 'bg-amber-400', done: 'bg-emerald-500' } as const;
 
 function MiniTodo({ todo, onOpen }: { todo: Todo; onOpen: (t: Todo) => void }) {
   return (
     <button
       onClick={() => onOpen(todo)}
-      className="w-full rounded-lg border border-line bg-surface px-2.5 py-2 text-left text-xs shadow-soft transition hover:shadow-lift"
+      className="w-full rounded-lg border border-line bg-surface px-2.5 py-2 text-left text-sm transition hover:shadow-float"
     >
       <div className="flex items-center gap-1.5">
         <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${STATUS_DOT[todo.status]}`} />
@@ -56,14 +56,14 @@ export default function WeekGrid({
             <div
               key={day.value}
               data-testid={`day-${day.value}`}
-              className={`flex min-h-[140px] flex-col rounded-xl border p-2 ${
-                isToday ? 'border-brand-300 bg-brand-50/50 dark:border-brand-500/40 dark:bg-brand-500/10' : 'border-transparent bg-subtle'
+              className={`flex min-h-[140px] flex-col rounded-card border p-2 ${
+                isToday ? 'border-fg bg-surface' : 'border-transparent bg-subtle'
               }`}
             >
               <div className="mb-2 flex items-center justify-between px-0.5">
                 <span
                   className={`text-xs font-semibold ${
-                    day.value === 0 ? 'text-red-500 dark:text-red-400' : day.value === 6 ? 'text-sky-600 dark:text-sky-400' : 'text-fg'
+                    day.value === 0 ? 'text-danger' : 'text-fg'
                   }`}
                 >
                   {day.label} <span className="font-normal tabular-nums text-faint">{date.slice(5)}</span>
@@ -89,7 +89,7 @@ export default function WeekGrid({
           );
         })}
       </div>
-      <div className="rounded-xl border border-dashed border-line p-3">
+      <div className="rounded-card border border-dashed border-line p-3">
         <div className="mb-2 flex items-center justify-between">
           <span className="text-xs font-semibold text-muted">요일 미지정 ({unscheduled.length})</span>
           <button className="btn-ghost btn-sm" onClick={() => onAdd(null)} aria-label="요일 미지정 할 일 추가">

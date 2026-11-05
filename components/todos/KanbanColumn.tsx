@@ -7,7 +7,7 @@ import Icon from '@/components/shared/Icon';
 import { STATUS_LABEL, type Todo, type TodoStatus } from '@/types';
 
 const ACCENT: Record<TodoStatus, string> = {
-  todo: 'bg-slate-400',
+  todo: 'bg-faint',
   doing: 'bg-amber-400',
   done: 'bg-emerald-500',
 };
@@ -29,17 +29,17 @@ export default function KanbanColumn({
     <section
       ref={setNodeRef}
       data-testid={`column-${status}`}
-      className={`flex min-h-[240px] flex-col rounded-xl border p-3 transition ${
-        isOver ? 'border-brand-300 bg-brand-50/60 dark:border-brand-500/40 dark:bg-brand-500/10' : 'border-transparent bg-subtle'
+      className={`flex min-h-[240px] flex-col rounded-card border p-3 transition ${
+        isOver ? 'border-fg/40 bg-strong' : 'border-transparent bg-subtle'
       }`}
     >
-      <header className="mb-3 flex items-center justify-between px-1">
-        <h2 className="flex items-center gap-2 text-sm font-semibold text-fg">
+      <header className="mb-3 flex items-center justify-between px-1 pt-1">
+        <h2 className="flex items-center gap-2 text-base font-semibold text-fg">
           <span className={`h-2 w-2 rounded-full ${ACCENT[status]}`} />
           {STATUS_LABEL[status]}
           <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-medium tabular-nums text-muted">{todos.length}</span>
         </h2>
-        <button className="icon-btn h-7 w-7" onClick={() => onAdd(status)} aria-label={`${STATUS_LABEL[status]}에 추가`}>
+        <button className="icon-btn" onClick={() => onAdd(status)} aria-label={`${STATUS_LABEL[status]}에 추가`}>
           <Icon name="plus" />
         </button>
       </header>

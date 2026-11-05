@@ -48,8 +48,8 @@ function SavableText({
       <label htmlFor={id} className="card-title block">{label}</label>
       <textarea id={id} className="input resize-y" rows={5} value={text} placeholder={placeholder} onChange={(e) => { setText(e.target.value); setState('idle'); }} />
       <div className="flex items-center justify-end gap-3 text-xs">
-        {state === 'saved' && !dirty && <span className="text-emerald-600 dark:text-emerald-400">저장됨</span>}
-        {state === 'error' && <span className="text-red-600 dark:text-red-400">저장 실패</span>}
+        {state === 'saved' && !dirty && <span className="text-muted">저장됨</span>}
+        {state === 'error' && <span className="text-danger">저장 실패</span>}
         <button className="btn-primary btn-sm" disabled={!dirty || state === 'saving'} onClick={save}>
           {state === 'saving' ? '저장 중…' : '저장'}
         </button>
@@ -94,7 +94,7 @@ function PlanDetail({ plan }: { plan: WeeklyPlan }) {
         title={`${start} ~ ${addDaysToKey(start, 6)}`}
         description={
           goal ? (
-            <span className="inline-flex items-center gap-1.5 text-brand-700 dark:text-brand-300">
+            <span className="inline-flex items-center gap-1.5 text-fg">
               <Icon name="target" className="h-3.5 w-3.5" />
               {goal.title}
             </span>
