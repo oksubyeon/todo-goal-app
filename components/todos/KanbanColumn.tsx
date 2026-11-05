@@ -3,6 +3,7 @@
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import TodoCard from './TodoCard';
+import Icon from '@/components/shared/Icon';
 import { STATUS_LABEL, type Todo, type TodoStatus } from '@/types';
 
 const ACCENT: Record<TodoStatus, string> = {
@@ -28,18 +29,18 @@ export default function KanbanColumn({
     <section
       ref={setNodeRef}
       data-testid={`column-${status}`}
-      className={`flex min-h-[200px] flex-col rounded-lg border p-3 transition ${
-        isOver ? 'border-indigo-300 bg-indigo-50/60' : 'border-slate-200 bg-slate-100/70'
+      className={`flex min-h-[240px] flex-col rounded-xl border p-3 transition ${
+        isOver ? 'border-brand-300 bg-brand-50/60 dark:border-brand-500/40 dark:bg-brand-500/10' : 'border-transparent bg-subtle'
       }`}
     >
-      <header className="mb-3 flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+      <header className="mb-3 flex items-center justify-between px-1">
+        <h2 className="flex items-center gap-2 text-sm font-semibold text-fg">
           <span className={`h-2 w-2 rounded-full ${ACCENT[status]}`} />
           {STATUS_LABEL[status]}
-          <span className="rounded-full bg-white px-2 text-xs text-slate-500">{todos.length}</span>
+          <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-medium tabular-nums text-muted">{todos.length}</span>
         </h2>
-        <button className="text-sm text-slate-500 hover:text-indigo-600" onClick={() => onAdd(status)} aria-label={`${STATUS_LABEL[status]}에 추가`}>
-          ＋
+        <button className="icon-btn h-7 w-7" onClick={() => onAdd(status)} aria-label={`${STATUS_LABEL[status]}에 추가`}>
+          <Icon name="plus" />
         </button>
       </header>
       <SortableContext items={todos.map((t) => t._id)} strategy={verticalListSortingStrategy}>
@@ -47,7 +48,11 @@ export default function KanbanColumn({
           {todos.map((todo) => (
             <TodoCard key={todo._id} todo={todo} onOpen={onOpen} />
           ))}
-          {todos.length === 0 && <p className="py-6 text-center text-xs text-slate-400">여기로 끌어다 놓으세요</p>}
+          {todos.length === 0 && (
+            <p className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-line py-8 text-xs text-faint">
+              여기로 끌어다 놓으세요
+            </p>
+          )}
         </div>
       </SortableContext>
     </section>

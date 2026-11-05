@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Modal from '@/components/shared/Modal';
+import Icon from '@/components/shared/Icon';
+import PageHeader from '@/components/shared/PageHeader';
 import WeeklyPlanCard from '@/components/weekly/WeeklyPlanCard';
 import WeeklyPlanForm from '@/components/weekly/WeeklyPlanForm';
 import { useLoad, useStore } from '@/store';
@@ -39,36 +41,43 @@ export default function WeeklyPage() {
   const others = plans.filter((p) => !recentKeys.includes(dateKeyFromStored(p.weekStart)));
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-bold">주간 계획</h1>
-          <p className="text-sm text-slate-500">1년 목표를 바탕으로 이번 주 목표를 세우고, 요일별로 할 일을 배치하세요.</p>
-        </div>
-        <button className="btn-primary" onClick={() => setCreating(thisWeek)}>＋ 주간 계획 만들기</button>
-      </div>
+    <div>
+      <PageHeader
+        title="주간 계획"
+        description="1년 목표를 바탕으로 이번 주 목표를 세우고, 요일별로 할 일을 배치하세요."
+        actions={
+          <button className="btn-primary" onClick={() => setCreating(thisWeek)}>
+            <Icon name="plus" />주간 계획 만들기
+          </button>
+        }
+      />
 
       {!loaded ? (
-        <p className="text-sm text-slate-500">불러오는 중…</p>
+        <p className="text-sm text-muted">불러오는 중…</p>
       ) : (
-        <>
+        <div className="space-y-8">
           <section>
-            <h2 className="mb-3 text-sm font-semibold text-slate-600">최근 4주</h2>
+            <h2 className="mb-3 text-sm font-semibold text-muted">최근 4주</h2>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {recentKeys.map((key, i) => {
                 const plan = byKey.get(key);
                 return plan ? (
                   <WeeklyPlanCard key={key} plan={plan} label={LABELS[i]} {...actions(plan)} />
                 ) : (
-                  <div key={key} className="card flex flex-col items-start justify-between gap-3 border-dashed">
-                    <div>
-                      <div className="text-xs font-semibold text-slate-400">{LABELS[i]}</div>
-                      <div className="font-semibold text-slate-500">
-                        {key} ~ {addDaysToKey(key, 6)}
+                  <div
+                    key={key}
+                    className="flex flex-col items-start justify-between gap-4 rounded-xl border border-dashed border-line p-5"
+                  >
+                    <div className="space-y-0.5">
+                      <div className="text-xs font-medium text-faint">{LABELS[i]}</div>
+                      <div className="font-semibold tracking-tight text-muted">
+                        {key} ~ {addDaysToKey(key, 6).slice(5)}
                       </div>
                     </div>
-                    <p className="text-sm text-slate-400">계획이 없습니다.</p>
-                    <button className="btn-secondary text-xs" onClick={() => setCreating(key)}>이 주 계획 만들기</button>
+                    <p className="text-sm text-faint">계획이 없습니다.</p>
+                    <button className="btn-secondary btn-sm" onClick={() => setCreating(key)}>
+                      <Icon name="plus" className="h-3.5 w-3.5" />이 주 계획 만들기
+                    </button>
                   </div>
                 );
               })}
@@ -76,7 +85,7 @@ export default function WeeklyPage() {
           </section>
           {others.length > 0 && (
             <section>
-              <h2 className="mb-3 text-sm font-semibold text-slate-600">다른 주</h2>
+              <h2 className="mb-3 text-sm font-semibold text-muted">다른 주</h2>
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {others.map((p) => (
                   <WeeklyPlanCard key={p._id} plan={p} {...actions(p)} />
@@ -84,7 +93,7 @@ export default function WeeklyPage() {
               </div>
             </section>
           )}
-        </>
+        </div>
       )}
 
       {editing && (

@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Modal from '@/components/shared/Modal';
+import Icon from '@/components/shared/Icon';
+import PageHeader from '@/components/shared/PageHeader';
 import GoalCard from '@/components/goals/GoalCard';
 import GoalForm from '@/components/goals/GoalForm';
 import { useLoad, useStore } from '@/store';
@@ -27,21 +29,26 @@ export default function GoalsPage() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-bold">1년 목표</h1>
-          <p className="text-sm text-slate-500">한 해 동안 이루고 싶은 목표를 적고, 주간 계획과 할 일을 연결하세요.</p>
-        </div>
-        <button className="btn-primary" onClick={() => setEditing('new')}>＋ 새 목표</button>
-      </div>
+    <div>
+      <PageHeader
+        title="1년 목표"
+        description="한 해 동안 이루고 싶은 목표를 적고, 주간 계획과 할 일을 연결하세요."
+        actions={
+          <button className="btn-primary" onClick={() => setEditing('new')}>
+            <Icon name="plus" />새 목표
+          </button>
+        }
+      />
 
       {!loaded ? (
-        <p className="text-sm text-slate-500">불러오는 중…</p>
+        <p className="text-sm text-muted">불러오는 중…</p>
       ) : goals.length === 0 ? (
-        <div className="card py-10 text-center">
-          <p className="text-slate-600">아직 1년 목표가 없습니다.</p>
-          <button className="btn-primary mt-3" onClick={() => setEditing('new')}>첫 목표 만들기</button>
+        <div className="card flex flex-col items-center gap-3 py-14 text-center">
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-300">
+            <Icon name="target" className="h-5 w-5" />
+          </span>
+          <p className="text-sm text-muted">아직 1년 목표가 없습니다.</p>
+          <button className="btn-primary" onClick={() => setEditing('new')}>첫 목표 만들기</button>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

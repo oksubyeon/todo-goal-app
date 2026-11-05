@@ -3,6 +3,8 @@
 import dynamic from 'next/dynamic';
 import { useMemo, useState } from 'react';
 import TodoModal from '@/components/todos/TodoModal';
+import Icon from '@/components/shared/Icon';
+import PageHeader from '@/components/shared/PageHeader';
 import { useLoad, useStore } from '@/store';
 import { dateKeyFromStored } from '@/lib/utils';
 import type { Todo, TodoStatus } from '@/types';
@@ -10,7 +12,7 @@ import type { Todo, TodoStatus } from '@/types';
 // dnd-kit은 브라우저 전용 측정을 하므로 SSR을 끕니다.
 const KanbanBoard = dynamic(() => import('@/components/todos/KanbanBoard'), {
   ssr: false,
-  loading: () => <p className="text-sm text-slate-500">보드를 불러오는 중…</p>,
+  loading: () => <p className="text-sm text-muted">보드를 불러오는 중…</p>,
 });
 
 type ModalState = { todo?: Todo; defaults?: Partial<Todo> } | null;
@@ -45,13 +47,12 @@ export default function TodosPage() {
     });
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-bold">할 일</h1>
-          <p className="text-sm text-slate-500">카드를 끌어서 상태와 순서를 바꾸세요. 카드를 누르면 수정할 수 있습니다.</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
+    <div>
+      <PageHeader
+        title="할 일"
+        description="카드를 끌어서 상태와 순서를 바꾸세요. 카드를 누르면 수정할 수 있습니다."
+        actions={
+          <>
           <select className="input w-auto" value={planFilter} onChange={(e) => setPlanFilter(e.target.value)} aria-label="주간 계획 필터">
             <option value="">모든 주</option>
             <option value="none">주간 계획 없음</option>
@@ -66,14 +67,17 @@ export default function TodosPage() {
               <option key={g._id} value={g._id}>{g.title}</option>
             ))}
           </select>
-          <button className="btn-primary" onClick={() => onAdd()}>＋ 새 할 일</button>
-        </div>
-      </div>
+          <button className="btn-primary" onClick={() => onAdd()}>
+            <Icon name="plus" />새 할 일
+          </button>
+          </>
+        }
+      />
 
       {loaded ? (
         <KanbanBoard todos={visible} onOpen={(todo) => setModal({ todo })} onAdd={onAdd} />
       ) : (
-        <p className="text-sm text-slate-500">불러오는 중…</p>
+        <p className="text-sm text-muted">불러오는 중…</p>
       )}
 
       {modal && <TodoModal todo={modal.todo} defaults={modal.defaults} onClose={() => setModal(null)} />}

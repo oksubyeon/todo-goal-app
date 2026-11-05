@@ -2,26 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 색 토큰 (RGB 값). tailwind.config.ts의 canvas/surface/... 가 이 값을 씁니다. */
+@layer base {
+  :root {
+    --canvas: 248 250 252; /* slate-50 */
+    --surface: 255 255 255;
+    --subtle: 241 245 249; /* slate-100 */
+    --line: 226 232 240; /* slate-200 */
+    --fg: 15 23 42; /* slate-900 */
+    --muted: 100 116 139; /* slate-500 */
+    --faint: 148 163 184; /* slate-400 */
+    color-scheme: light;
+  }
+  .dark {
+    --canvas: 2 6 23; /* slate-950 */
+    --surface: 15 23 42; /* slate-900 */
+    --subtle: 30 41 59; /* slate-800 */
+    --line: 51 65 85; /* slate-700 */
+    --fg: 241 245 249; /* slate-100 */
+    --muted: 148 163 184; /* slate-400 */
+    --faint: 100 116 139; /* slate-500 */
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-canvas font-sans text-fg antialiased;
+    font-feature-settings: 'ss06' on;
+  }
+  ::selection {
+    @apply bg-brand-600/20;
+  }
+}
+
 @layer components {
+  /* 버튼: 둥근 모서리 + 은은한 그림자 */
   .btn {
-    @apply inline-flex items-center justify-center gap-1 rounded-md px-3 py-1.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40
+      disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {
-    @apply btn bg-indigo-600 text-white hover:bg-indigo-700;
+    @apply btn bg-brand-600 text-white shadow-soft hover:bg-brand-700;
   }
   .btn-secondary {
-    @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+    @apply btn border border-line bg-surface text-fg shadow-soft hover:bg-subtle;
+  }
+  .btn-ghost {
+    @apply btn text-muted hover:bg-subtle hover:text-fg;
   }
   .btn-danger {
-    @apply btn text-red-600 hover:bg-red-50;
+    @apply btn text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10;
   }
+  .btn-sm {
+    @apply px-2.5 py-1 text-xs;
+  }
+  .icon-btn {
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted transition hover:bg-subtle hover:text-fg
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40;
+  }
+
+  /* 입력 */
   .input {
-    @apply w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100;
+    @apply w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-fg shadow-soft outline-none transition
+      placeholder:text-faint focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20;
   }
   .label {
-    @apply mb-1 block text-xs font-semibold text-slate-600;
+    @apply mb-1.5 block text-xs font-medium text-muted;
   }
+
+  /* 카드 */
   .card {
-    @apply rounded-lg border border-slate-200 bg-white p-4 shadow-sm;
+    @apply rounded-xl border border-line bg-surface p-5 shadow-soft;
+  }
+  .card-title {
+    @apply text-sm font-semibold text-fg;
+  }
+
+  /* 작은 배지 */
+  .badge {
+    @apply inline-flex max-w-full items-center gap-1 truncate rounded-md px-1.5 py-0.5 text-xs font-medium;
+  }
+  .badge-neutral {
+    @apply badge bg-subtle text-muted;
+  }
+  .badge-brand {
+    @apply badge bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300;
+  }
+  .badge-red {
+    @apply badge bg-red-50 text-red-700 dark:bg-red-500/15 dark:text-red-300;
+  }
+  .badge-amber {
+    @apply badge bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300;
+  }
+  .badge-green {
+    @apply badge bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300;
+  }
+  .badge-sky {
+    @apply badge bg-sky-50 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300;
   }
 }

@@ -3,6 +3,8 @@
 import { useEffect } from 'react';
 import { useStore } from '@/store';
 import { getWeekStart, toDateKey } from '@/lib/utils';
+import Icon from '@/components/shared/Icon';
+import ThemeToggle from './ThemeToggle';
 import UserMenu from './UserMenu';
 
 export default function Header() {
@@ -20,19 +22,30 @@ export default function Header() {
   weekEnd.setDate(weekEnd.getDate() + 6);
 
   return (
-    <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 md:px-6">
-      <div className="text-sm text-slate-500" suppressHydrationWarning>
-        이번 주 <span className="font-medium text-slate-700">{toDateKey(weekStart)} ~ {toDateKey(weekEnd)}</span>
+    <header className="sticky top-0 z-30 border-b border-line bg-surface/80 backdrop-blur">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 md:px-8">
+        <div className="truncate whitespace-nowrap text-sm text-muted" suppressHydrationWarning>
+          이번 주{' '}
+          <span className="font-medium tabular-nums text-fg">
+            {/* 모바일에서는 연도를 빼서 한 줄에 맞춥니다 */}
+            <span className="hidden sm:inline">{toDateKey(weekStart).slice(0, 5)}</span>
+            {toDateKey(weekStart).slice(5)} ~ <span className="hidden sm:inline">{toDateKey(weekEnd).slice(0, 5)}</span>
+            {toDateKey(weekEnd).slice(5)}
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <ThemeToggle />
+          <UserMenu />
+        </div>
       </div>
-      <UserMenu />
       {notice && (
         <div
           role="alert"
-          className="fixed bottom-4 right-4 z-50 flex max-w-sm items-start gap-3 rounded-lg bg-slate-900 px-4 py-3 text-sm text-white shadow-lg"
+          className="fixed bottom-4 right-4 z-50 flex max-w-sm items-start gap-3 rounded-xl border border-line bg-surface px-4 py-3 text-sm text-fg shadow-lift"
         >
-          <span>{notice}</span>
-          <button className="text-slate-400 hover:text-white" onClick={() => setNotice(null)} aria-label="닫기">
-            ✕
+          <span className="flex-1">{notice}</span>
+          <button className="text-faint hover:text-fg" onClick={() => setNotice(null)} aria-label="닫기">
+            <Icon name="x" />
           </button>
         </div>
       )}

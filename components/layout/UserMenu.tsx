@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/apiClient';
+import Icon from '@/components/shared/Icon';
 
 type Me = { username: string; avatarUrl: string };
 
@@ -27,18 +28,20 @@ export default function UserMenu() {
     }
   };
 
-  if (!me) return <div className="h-8" />;
+  if (!me) return <div className="h-8 w-8" />;
   return (
-    <div className="flex items-center gap-2" data-testid="user-menu">
+    <div className="flex items-center gap-2 border-l border-line pl-3" data-testid="user-menu">
       {me.avatarUrl && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={me.avatarUrl} alt="" className="h-8 w-8 rounded-full border border-slate-200" />
+        <img src={me.avatarUrl} alt="" className="h-8 w-8 rounded-full ring-1 ring-line" />
       )}
-      <span className="hidden text-sm font-medium text-slate-700 sm:inline" data-testid="username">
+      <span className="hidden text-sm font-medium text-fg sm:inline" data-testid="username">
         {me.username}
       </span>
-      <button className="btn-secondary px-2 py-1 text-xs" onClick={logout} disabled={leaving}>
-        {leaving ? '로그아웃 중…' : '로그아웃'}
+      <button className="btn-ghost btn-sm whitespace-nowrap" onClick={logout} disabled={leaving} aria-label="로그아웃">
+        <Icon name="logout" className="h-3.5 w-3.5" />
+        {/* 모바일에서는 아이콘만 */}
+        <span className="hidden sm:inline">{leaving ? '로그아웃 중…' : '로그아웃'}</span>
       </button>
     </div>
   );

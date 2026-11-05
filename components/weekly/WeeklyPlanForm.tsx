@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Icon from '@/components/shared/Icon';
 import { useStore } from '@/store';
 import { weekKey } from '@/lib/utils';
 import { MAX_WEEKLY_GOALS, type WeeklyPlan } from '@/types';
@@ -84,27 +85,28 @@ export default function WeeklyPlanForm({
                 aria-label={`주간 목표 ${i + 1}`}
                 maxLength={200}
               />
-              <button type="button" className="btn-secondary px-2" onClick={() => setItems(items.filter((_, j) => j !== i))} aria-label="목표 삭제">
-                ✕
+              <button type="button" className="icon-btn h-9 w-9 shrink-0" onClick={() => setItems(items.filter((_, j) => j !== i))} aria-label="목표 삭제">
+                <Icon name="x" />
               </button>
             </div>
           ))}
         </div>
         <button
           type="button"
-          className="btn-secondary mt-2 text-xs"
+          className="btn-secondary btn-sm mt-2"
           disabled={items.length >= MAX_WEEKLY_GOALS}
           onClick={() => setItems([...items, { text: '', done: false }])}
         >
-          ＋ 목표 추가
+          <Icon name="plus" className="h-3.5 w-3.5" />
+          목표 추가
         </button>
-        {items.length >= MAX_WEEKLY_GOALS && <p className="mt-1 text-xs text-slate-500">한 주에 목표는 최대 {MAX_WEEKLY_GOALS}개입니다.</p>}
+        {items.length >= MAX_WEEKLY_GOALS && <p className="mt-1 text-xs text-muted">한 주에 목표는 최대 {MAX_WEEKLY_GOALS}개입니다.</p>}
       </div>
       <div>
         <label className="label" htmlFor="week-memo">메모</label>
         <textarea id="week-memo" className="input" rows={3} value={memo} onChange={(e) => setMemo(e.target.value)} />
       </div>
-      {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
+      {error && <p className="text-sm text-red-600 dark:text-red-400" role="alert">{error}</p>}
       <div className="flex justify-end gap-2">
         <button type="button" className="btn-secondary" onClick={onCancel}>취소</button>
         <button type="submit" className="btn-primary" disabled={saving}>{saving ? '저장 중…' : plan ? '저장' : '만들기'}</button>

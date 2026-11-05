@@ -3,16 +3,23 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import Modal from '@/components/shared/Modal';
+import Icon from '@/components/shared/Icon';
+import PageHeader from '@/components/shared/PageHeader';
 import ProgressBar from '@/components/weekly/ProgressBar';
 import WeeklyGoalItem from '@/components/weekly/WeeklyGoalItem';
 import WeeklyPlanForm from '@/components/weekly/WeeklyPlanForm';
 import TodoModal from '@/components/todos/TodoModal';
 import { useLoad, useStore } from '@/store';
 import { compareTodos } from '@/lib/kanban';
-import { addDaysToKey, dateKeyFromStored, percent, weekKey } from '@/lib/utils';
+import { dateKeyFromStored, percent, weekKey } from '@/lib/utils';
 import { STATUSES, STATUS_LABEL, type Todo } from '@/types';
 
-const STATUS_COLOR = { todo: 'text-slate-700', doing: 'text-amber-600', done: 'text-emerald-600' } as const;
+const STATUS_COLOR = {
+  todo: 'text-fg',
+  doing: 'text-amber-600 dark:text-amber-400',
+  done: 'text-emerald-600 dark:text-emerald-400',
+} as const;
+const STATUS_DOT = { todo: 'bg-slate-400', doing: 'bg-amber-400', done: 'bg-emerald-500' } as const;
 
 export default function DashboardPage() {
   useLoad('plans', 'goals', 'todos');
@@ -33,7 +40,7 @@ export default function DashboardPage() {
   const todayDow = new Date().getDay();
   const todayTodos = weekTodos.filter((t) => t.dayOfWeek === todayDow).sort(compareTodos);
 
-  if (!loaded) return <p className="text-sm text-slate-500">불러오는 중…</p>;
+  if (!loaded) return <p className="text-sm text-muted">불러오는 중…</p>;
 
   const steps = [
     { done: goals.length > 0, label: '1년 목표 세우기', href: '/goals' },
@@ -43,29 +50,30 @@ export default function DashboardPage() {
   const onboarding = steps.some((s) => !s.done);
 
   return (
-    <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-bold">대시보드</h1>
-        <p className="text-sm text-slate-500">
-          이번 주 {thisWeek} ~ {addDaysToKey(thisWeek, 6)}
-        </p>
-      </div>
+    <div className="space-y-6">
+      <PageHeader title="대시보드" description="이번 주 목표와 오늘 할 일을 한눈에 확인하세요." />
 
       {onboarding && (
-        <section className="card border-indigo-200 bg-indigo-50/50">
-          <h2 className="mb-2 text-sm font-semibold text-indigo-800">시작하기: 목표 → 주간 계획 → 할 일</h2>
-          <ol className="space-y-1 text-sm">
+        <section className="rounded-xl border border-brand-200 bg-brand-50/60 p-5 dark:border-brand-500/30 dark:bg-brand-500/10">
+          <h2 className="mb-3 text-sm font-semibold text-brand-800 dark:text-brand-200">시작하기: 목표 → 주간 계획 → 할 일</h2>
+          <ol className="space-y-2 text-sm">
             {steps.map((s, i) => (
-              <li key={s.label} className="flex items-center gap-2">
-                <span className={s.done ? 'text-emerald-600' : 'text-slate-400'}>{s.done ? '✔' : `${i + 1}.`}</span>
+              <li key={s.label} className="flex items-center gap-2.5">
+                <span
+                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+                    s.done ? 'bg-emerald-500 text-white' : 'bg-surface text-muted ring-1 ring-line'
+                  }`}
+                >
+                  {s.done ? <Icon name="check" className="h-3 w-3" /> : i + 1}
+                </span>
                 {s.done ? (
-                  <span className="text-slate-500 line-through">{s.label}</span>
+                  <span className="text-muted line-through">{s.label}</span>
                 ) : s.href ? (
-                  <Link href={s.href} className="font-medium text-indigo-700 underline">{s.label}</Link>
+                  <Link href={s.href} className="font-medium text-brand-700 hover:underline dark:text-brand-300">{s.label}</Link>
                 ) : s.action ? (
-                  <button onClick={s.action} className="font-medium text-indigo-700 underline">{s.label}</button>
+                  <button onClick={s.action} className="font-medium text-brand-700 hover:underline dark:text-brand-300">{s.label}</button>
                 ) : (
-                  <span>{s.label}</span>
+                  <span className="text-fg">{s.label}</span>
                 )}
               </li>
             ))}
@@ -74,76 +82,92 @@ export default function DashboardPage() {
       )}
 
       {!plan ? (
-        <section className="card py-8 text-center">
-          <p className="text-slate-600">이번 주 계획이 아직 없습니다.</p>
-          <button className="btn-primary mt-3" onClick={() => setCreating(true)}>이번 주 계획 만들기</button>
+        <section className="card flex flex-col items-center gap-3 py-14 text-center">
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-300">
+            <Icon name="calendar" className="h-5 w-5" />
+          </span>
+          <p className="text-sm text-muted">이번 주 계획이 아직 없습니다.</p>
+          <button className="btn-primary" onClick={() => setCreating(true)}>이번 주 계획 만들기</button>
         </section>
       ) : (
         <>
           <div className="grid gap-4 md:grid-cols-3">
-            <section className="card space-y-3 md:col-span-2">
+            <section className="card space-y-4 md:col-span-2">
               <div className="flex items-center justify-between">
-                <h2 className="text-sm font-semibold">이번 주 목표</h2>
-                <Link href={`/weekly/${plan._id}`} className="text-xs text-indigo-600 hover:underline">주간 계획 열기 →</Link>
+                <h2 className="card-title">이번 주 목표</h2>
+                <Link href={`/weekly/${plan._id}`} className="text-xs font-medium text-brand-600 hover:underline dark:text-brand-400">
+                  주간 계획 열기 →
+                </Link>
               </div>
               {plan.goals.length === 0 ? (
-                <p className="text-sm italic text-slate-400">주간 목표가 없습니다.</p>
+                <p className="text-sm text-faint">주간 목표가 없습니다.</p>
               ) : (
-                plan.goals.map((g, i) => <WeeklyGoalItem key={g._id} goal={g} onToggle={(done) => toggleGoal(plan._id, i, done)} />)
+                <div>
+                  {plan.goals.map((g, i) => (
+                    <WeeklyGoalItem key={g._id} goal={g} onToggle={(done) => toggleGoal(plan._id, i, done)} />
+                  ))}
+                </div>
               )}
               <ProgressBar value={progress} label="주간 진행률" detail={`(${counts.done}/${weekTodos.length})`} />
             </section>
-            <section className="card">
-              <h2 className="mb-3 text-sm font-semibold">이번 주 할 일</h2>
+            <section className="card flex flex-col gap-4">
+              <h2 className="card-title">이번 주 할 일</h2>
               <div className="grid grid-cols-3 gap-2 text-center">
                 {STATUSES.map((s) => (
-                  <div key={s} className="rounded-md bg-slate-50 py-3" data-testid={`count-${s}`}>
-                    <div className={`text-2xl font-bold ${STATUS_COLOR[s]}`}>{counts[s]}</div>
-                    <div className="text-xs text-slate-500">{STATUS_LABEL[s]}</div>
+                  <div key={s} className="rounded-lg bg-subtle py-3" data-testid={`count-${s}`}>
+                    <div className={`text-2xl font-semibold tabular-nums ${STATUS_COLOR[s]}`}>{counts[s]}</div>
+                    <div className="mt-0.5 text-xs text-muted">{STATUS_LABEL[s]}</div>
                   </div>
                 ))}
               </div>
-              <Link href="/todos" className="btn-secondary mt-3 w-full">칸반 보드로</Link>
+              <Link href="/todos" className="btn-secondary mt-auto w-full">
+                칸반 보드로
+              </Link>
             </section>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <section className="card space-y-2">
+            <section className="card space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="text-sm font-semibold">오늘 할 일</h2>
+                <h2 className="card-title">오늘 할 일</h2>
                 <button
-                  className="text-xs text-indigo-600 hover:underline"
+                  className="btn-ghost btn-sm -mr-2"
+                  aria-label="오늘 할 일 추가"
                   onClick={() => setTodoModal({ defaults: { weeklyPlanId: plan._id, dayOfWeek: todayDow, goalId: plan.goalId ?? null } })}
                 >
-                  ＋ 추가
+                  <Icon name="plus" className="h-3.5 w-3.5" />
+                  추가
                 </button>
               </div>
               {todayTodos.length === 0 ? (
-                <p className="text-sm italic text-slate-400">오늘로 배치된 할 일이 없습니다.</p>
+                <p className="text-sm text-faint">오늘로 배치된 할 일이 없습니다.</p>
               ) : (
-                <ul className="space-y-1">
+                <ul className="-mx-2 space-y-0.5">
                   {todayTodos.map((t) => (
                     <li key={t._id}>
-                      <button onClick={() => setTodoModal({ todo: t })} className="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-sm hover:bg-slate-50">
-                        <span className="text-xs text-slate-400">[{STATUS_LABEL[t.status]}]</span>
-                        <span className={t.status === 'done' ? 'text-slate-400 line-through' : ''}>{t.title}</span>
+                      <button
+                        onClick={() => setTodoModal({ todo: t })}
+                        className="flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left text-sm transition hover:bg-subtle"
+                      >
+                        <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${STATUS_DOT[t.status]}`} aria-label={STATUS_LABEL[t.status]} />
+                        <span className={t.status === 'done' ? 'text-faint line-through' : 'text-fg'}>{t.title}</span>
                       </button>
                     </li>
                   ))}
                 </ul>
               )}
             </section>
-            <section className="card space-y-3">
-              <h2 className="text-sm font-semibold">1년 목표별 이번 주 할 일</h2>
+            <section className="card space-y-4">
+              <h2 className="card-title">1년 목표별 이번 주 할 일</h2>
               {goals.length === 0 ? (
-                <p className="text-sm italic text-slate-400">1년 목표가 없습니다.</p>
+                <p className="text-sm text-faint">1년 목표가 없습니다.</p>
               ) : (
                 goals.map((g) => {
                   const linked = weekTodos.filter((t) => t.goalId === g._id);
                   const done = linked.filter((t) => t.status === 'done').length;
                   return (
                     <div key={g._id} data-testid="goal-week-row">
-                      <ProgressBar value={percent(done, linked.length)} label={`🎯 ${g.title}`} detail={`할 일 ${linked.length}개 중 ${done}개 완료`} />
+                      <ProgressBar value={percent(done, linked.length)} label={g.title} detail={`할 일 ${linked.length}개 중 ${done}개 완료`} />
                     </div>
                   );
                 })

@@ -4,23 +4,23 @@ export default function ProgressBar({
   detail,
 }: {
   value: number;
-  label?: string;
+  label?: React.ReactNode;
   detail?: string;
 }) {
   const v = Math.max(0, Math.min(100, value));
   return (
     <div>
       {(label || detail) && (
-        <div className="mb-1 flex items-baseline justify-between text-xs text-slate-500">
-          <span>{label}</span>
-          <span>
-            <span className="font-semibold text-slate-800" data-testid="progress-value">{v}%</span>
+        <div className="mb-1.5 flex items-baseline justify-between gap-3 text-xs text-muted">
+          <span className="min-w-0 truncate">{label}</span>
+          <span className="shrink-0 tabular-nums">
+            <span className="font-semibold text-fg" data-testid="progress-value">{v}%</span>
             {detail && <span className="ml-1">{detail}</span>}
           </span>
         </div>
       )}
-      <div className="h-2 overflow-hidden rounded-full bg-slate-200" role="progressbar" aria-valuenow={v} aria-valuemin={0} aria-valuemax={100}>
-        <div className="h-full rounded-full bg-indigo-500 transition-all" style={{ width: `${v}%` }} />
+      <div className="h-1.5 overflow-hidden rounded-full bg-subtle" role="progressbar" aria-valuenow={v} aria-valuemin={0} aria-valuemax={100}>
+        <div className="h-full rounded-full bg-brand-600 transition-all dark:bg-brand-500" style={{ width: `${v}%` }} />
       </div>
     </div>
   );

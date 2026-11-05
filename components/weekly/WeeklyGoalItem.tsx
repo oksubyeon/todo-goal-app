@@ -4,14 +4,14 @@ import type { WeeklyGoal } from '@/types';
 
 export default function WeeklyGoalItem({ goal, onToggle }: { goal: WeeklyGoal; onToggle: (done: boolean) => void }) {
   return (
-    <label className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 hover:bg-slate-50">
+    <label className="-mx-2 flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 transition hover:bg-subtle">
       <input
         type="checkbox"
-        className="h-4 w-4 rounded border-slate-300 accent-indigo-600"
+        className="h-4 w-4 shrink-0 rounded accent-brand-600"
         checked={goal.done}
         onChange={(e) => onToggle(e.target.checked)}
       />
-      <span className={`text-sm ${goal.done ? 'text-slate-400 line-through' : 'text-slate-800'}`}>{goal.text}</span>
+      <span className={`text-sm ${goal.done ? 'text-faint line-through' : 'text-fg'}`}>{goal.text}</span>
     </label>
   );
 }

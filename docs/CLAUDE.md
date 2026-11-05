@@ -40,6 +40,22 @@ tests/          Vitest
 scripts/        dev-db.mjs, smoke.mjs
 ```
 
+## 디자인 시스템
+
+- **색:** 메인 컬러는 `brand-*`(Tailwind indigo, `brand-600` = #4F46E5)입니다. 회색과 흰색은 의미 토큰으로 씁니다.
+  - `bg-canvas`: 페이지 배경
+  - `bg-surface`: 카드, 모달, 입력
+  - `bg-subtle`: 은은한 배경, hover
+  - `border-line`: 테두리
+  - `text-fg`, `text-muted`, `text-faint`: 본문, 보조, 흐린 글자
+
+  토큰 값은 `app/globals.css`의 CSS 변수에 있고, `.dark`에서 값만 바뀝니다. 그래서 새 화면에는 `slate-*`나 `bg-white`를 직접 쓰지 말고 토큰을 쓰세요. 강조색 배경에는 `dark:` 변형을 같이 줍니다(예: `badge-brand`).
+- **공통 클래스(`app/globals.css`):** `.card`, `.card-title`, `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.btn-danger`, `.btn-sm`, `.icon-btn`, `.input`, `.label`, `.badge-*`. 모서리는 카드 `rounded-xl`, 버튼과 입력 `rounded-lg`입니다. 그림자는 `shadow-soft`가 기본이고, hover와 모달에 `shadow-lift`를 씁니다.
+- **다크 모드:** `<html class="dark">`로 켭니다. 헤더의 `ThemeToggle`이 시스템 → 라이트 → 다크 순으로 바꾸고, 선택은 `localStorage.theme`에 저장합니다. `app/layout.tsx`의 인라인 스크립트가 페인트 전에 적용해서 깜빡이지 않습니다.
+- **폰트:** Pretendard Variable(npm `pretendard`, 자체 호스팅)입니다.
+- **아이콘:** `components/shared/Icon.tsx`(선 아이콘)를 씁니다. 이모지는 쓰지 않습니다.
+- **레이아웃:** 화면 제목은 `PageHeader`(제목, 설명, 동작 버튼)로 만듭니다. 본문은 `AppShell`이 `max-w-6xl`과 같은 좌우 여백으로 정렬합니다.
+
 ## 핵심 규칙
 
 - **주(week)**: 월요일 시작. `weekStart`는 월요일의 **UTC 자정 Date**로 저장하고, 클라이언트는 `'YYYY-MM-DD'`로 주고받습니다 (`lib/utils.ts`의 `weekKey`, `parseDateKey`, `dateKeyFromStored`). 서버는 아무 날짜나 받아도 그 주 월요일로 맞춥니다.

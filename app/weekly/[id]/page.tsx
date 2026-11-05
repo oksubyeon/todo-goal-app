@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Modal from '@/components/shared/Modal';
+import Icon from '@/components/shared/Icon';
+import PageHeader from '@/components/shared/PageHeader';
 import ProgressBar from '@/components/weekly/ProgressBar';
 import WeekGrid from '@/components/weekly/WeekGrid';
 import WeeklyGoalItem from '@/components/weekly/WeeklyGoalItem';
@@ -42,13 +44,13 @@ function SavableText({
   };
 
   return (
-    <div className="card space-y-2">
-      <label htmlFor={id} className="text-sm font-semibold">{label}</label>
-      <textarea id={id} className="input" rows={5} value={text} placeholder={placeholder} onChange={(e) => { setText(e.target.value); setState('idle'); }} />
-      <div className="flex items-center justify-end gap-2 text-xs">
-        {state === 'saved' && !dirty && <span className="text-emerald-600">저장됨</span>}
-        {state === 'error' && <span className="text-red-600">저장 실패</span>}
-        <button className="btn-primary" disabled={!dirty || state === 'saving'} onClick={save}>
+    <div className="card space-y-3">
+      <label htmlFor={id} className="card-title block">{label}</label>
+      <textarea id={id} className="input resize-y" rows={5} value={text} placeholder={placeholder} onChange={(e) => { setText(e.target.value); setState('idle'); }} />
+      <div className="flex items-center justify-end gap-3 text-xs">
+        {state === 'saved' && !dirty && <span className="text-emerald-600 dark:text-emerald-400">저장됨</span>}
+        {state === 'error' && <span className="text-red-600 dark:text-red-400">저장 실패</span>}
+        <button className="btn-primary btn-sm" disabled={!dirty || state === 'saving'} onClick={save}>
           {state === 'saving' ? '저장 중…' : '저장'}
         </button>
       </div>
@@ -81,30 +83,38 @@ function PlanDetail({ plan }: { plan: WeeklyPlan }) {
   };
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <Link href="/weekly" className="text-xs text-slate-500 hover:text-indigo-600">← 주간 계획</Link>
-          <h1 className="text-xl font-bold">
-            {start} ~ {addDaysToKey(start, 6)}
-          </h1>
-          {goal ? (
-            <p className="text-sm text-indigo-700">🎯 {goal.title}</p>
+    <div className="space-y-6">
+      <PageHeader
+        back={
+          <Link href="/weekly" className="inline-flex items-center gap-1 text-xs font-medium text-muted transition hover:text-fg">
+            <Icon name="chevronLeft" className="h-3.5 w-3.5" />
+            주간 계획
+          </Link>
+        }
+        title={`${start} ~ ${addDaysToKey(start, 6)}`}
+        description={
+          goal ? (
+            <span className="inline-flex items-center gap-1.5 text-brand-700 dark:text-brand-300">
+              <Icon name="target" className="h-3.5 w-3.5" />
+              {goal.title}
+            </span>
           ) : (
-            <p className="text-sm text-slate-400">연결된 1년 목표 없음</p>
-          )}
-        </div>
-        <div className="flex gap-2">
-          <button className="btn-secondary" onClick={() => setEditing(true)}>목표·메모 편집</button>
-          <button className="btn-danger" onClick={remove}>삭제</button>
-        </div>
-      </div>
+            '연결된 1년 목표 없음'
+          )
+        }
+        actions={
+          <>
+            <button className="btn-secondary" onClick={() => setEditing(true)}>목표·메모 편집</button>
+            <button className="btn-danger" onClick={remove}>삭제</button>
+          </>
+        }
+      />
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <section className="card space-y-3 lg:col-span-1">
-          <h2 className="text-sm font-semibold">이번 주 목표</h2>
+        <section className="card space-y-4 lg:col-span-1">
+          <h2 className="card-title">이번 주 목표</h2>
           {plan.goals.length === 0 ? (
-            <p className="text-sm italic text-slate-400">주간 목표가 없습니다. 편집에서 추가하세요.</p>
+            <p className="text-sm text-faint">주간 목표가 없습니다. 편집에서 추가하세요.</p>
           ) : (
             <div>
               {plan.goals.map((g, i) => (
@@ -127,8 +137,8 @@ function PlanDetail({ plan }: { plan: WeeklyPlan }) {
         </div>
       </div>
 
-      <section className="space-y-2">
-        <h2 className="text-sm font-semibold">요일별 할 일</h2>
+      <section className="space-y-3">
+        <h2 className="card-title">요일별 할 일</h2>
         <WeekGrid
           plan={plan}
           onOpen={(todo) => setTodoModal({ todo })}
@@ -168,12 +178,12 @@ export default function WeeklyDetailPage({ params }: { params: { id: string } })
   const loaded = useStore((s) => s.plansLoaded);
   const plan = useStore((s) => s.plans.find((p) => p._id === params.id));
 
-  if (!loaded) return <p className="text-sm text-slate-500">불러오는 중…</p>;
+  if (!loaded) return <p className="text-sm text-muted">불러오는 중…</p>;
   if (!plan) {
     return (
-      <div className="card text-center">
-        <p className="text-slate-600">주간 계획을 찾을 수 없습니다.</p>
-        <Link href="/weekly" className="btn-secondary mt-3">주간 계획 목록으로</Link>
+      <div className="card flex flex-col items-center gap-3 py-14 text-center">
+        <p className="text-sm text-muted">주간 계획을 찾을 수 없습니다.</p>
+        <Link href="/weekly" className="btn-secondary">주간 계획 목록으로</Link>
       </div>
     );
   }

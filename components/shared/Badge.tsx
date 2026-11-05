@@ -1,7 +1,21 @@
-export default function Badge({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+import Icon, { type IconName } from './Icon';
+
+type Tone = 'neutral' | 'brand' | 'red' | 'amber' | 'green' | 'sky';
+
+const TONE: Record<Tone, string> = {
+  neutral: 'badge-neutral',
+  brand: 'badge-brand',
+  red: 'badge-red',
+  amber: 'badge-amber',
+  green: 'badge-green',
+  sky: 'badge-sky',
+};
+
+export default function Badge({ children, tone = 'neutral', icon }: { children: React.ReactNode; tone?: Tone; icon?: IconName }) {
   return (
-    <span className={`inline-flex max-w-full items-center truncate rounded px-1.5 py-0.5 text-[11px] font-medium ${className || 'bg-slate-100 text-slate-600'}`}>
-      {children}
+    <span className={TONE[tone]}>
+      {icon && <Icon name={icon} className="h-3 w-3" />}
+      <span className="truncate">{children}</span>
     </span>
   );
 }
