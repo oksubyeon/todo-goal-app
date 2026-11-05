@@ -1,0 +1,10 @@
+node_modules
+.next
+.env
+.env.local
+*.tsbuildinfo
+next-env.d.ts
+.mongo-data
+
+# OMC 작업 상태 (로컬 전용)
+.omc/
